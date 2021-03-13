@@ -12,15 +12,15 @@ import java.util.Set;
 /**
  * configure the web services and properties
  * <p>
- * M151: BookDB
+ * M151: ClientBD
  *
- * @author Marcel Suter (Ghwalin)
+ * @author Leon Funtik
  */
 
 @ApplicationPath("/resource")
 
 public class Config extends Application {
-    private static final String PROPERTIES_PATH = "/home/bzz/webapp/book.properties";
+    private static final String PROPERTIES_PATH = "/home/bzz/webapp/client.properties";
     private static Properties properties = null;
 
     /**
@@ -31,7 +31,7 @@ public class Config extends Application {
     @Override
     public Set<Class<?>> getClasses() {
         HashSet providers = new HashSet<Class<?>>();
-        providers.add(TestService.class);
+        providers.add(BankingService.class);
         return providers;
     }
 

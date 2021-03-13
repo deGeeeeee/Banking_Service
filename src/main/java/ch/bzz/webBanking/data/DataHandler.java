@@ -16,9 +16,9 @@ import java.util.Map;
 /**
  * data handler for reading and writing the csv files
  * <p>
- * M133: Bookshelf
+ * M133: Banking
  *
- * @author Marcel Suter
+ * @author Leon Funtik
  */
 
 public class DataHandler {
@@ -26,12 +26,11 @@ public class DataHandler {
     private static Map<String, Client> clientMap;
     private static Map<String, Account> accountMap;
 
+
     /**
      * default constructor: defeat instantiation
      */
     private DataHandler() {
-        Config.getProperty("clientJSON");
-        Config.getProperty("accountJSON");
         clientMap = new HashMap<>();
         accountMap = new HashMap<>();
         readJSON();
@@ -51,21 +50,37 @@ public class DataHandler {
         return clientMap;
     }
 
+    public static Map<String, Account> readAccounts() {
+        try {
+            Gson gson = new Gson();
 
+            Reader reader = Files.newBufferedReader(Paths.get(Config.getProperty("clientJSON")));
+            accountMap = gson.fromJson(reader, Map.class);
+            reader.close();
 
-    /**
-     * saves a book
-     * @param client  the book to be saved
-     */
-    public static void saveClient(Client client) {
-        getClientMap().put(client.getClientUUID(), client);
-        writeJSON();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return accountMap;
     }
 
     /**
-     * reads a single publisher identified by its uuid
+     * reads a single client identified by its uuid
+     * @param clientUUID  the identifier
+     * @return client-object
+     */
+    public static Client readClient(String clientUUID) {
+        Client client = new Client();
+        if (getClientMap().containsKey(clientUUID)) {
+            client = getClientMap().get(clientUUID);
+        }
+        return client;
+    }
+
+    /**
+     * reads a single account identified by its uuid
      * @param accountUUID  the identifier
-     * @return publisher-object
+     * @return account-object
      */
     public static Account readAccount(String accountUUID) {
         Account account = new Account();
@@ -75,26 +90,41 @@ public class DataHandler {
         return account;
     }
 
+
+
     /**
-     * saves a publisher
-     * @param publisher  the publisher to be saved
+     * saves a client
+     * @param client  the client to be saved
      */
-    public static void savePublisher(Account publisher) {
-        getAccountMap().put(publisher.getAccountUUID(), publisher);
+    public static void saveClient(Client client) {
+        getClientMap().put(client.getClientUUID(), client);
+        writeJSON();
+    }
+
+
+
+
+
+    /**
+     * saves a account
+     * @param account  the account to be saved
+     */
+    public static void saveAccount(Account account) {
+        getAccountMap().put(account.getAccountUUID(), account);
         writeJSON();
     }
 
     /**
-     * gets the bookMap
-     * @return the bookMap
+     * gets the clientMap
+     * @return the clientMap
      */
     public static Map<String, Client> getClientMap() {
         return clientMap;
     }
 
     /**
-     * gets the publisherMap
-     * @return the publisherMap
+     * gets the getAccountMap
+     * @return the getAccountMap
      */
     public static Map<String, Account> getAccountMap() {
         return accountMap;
@@ -105,11 +135,11 @@ public class DataHandler {
     }
 
     /**
-     * reads the books and publishers
+     * reads the Clients and Accounts
      */
     private static void readJSON() {
         try {
-            byte[] jsonData = Files.readAllBytes(Paths.get(Config.getProperty("bookJSON")));
+            byte[] jsonData = Files.readAllBytes(Paths.get(Config.getProperty("clientJSON")));
             ObjectMapper objectMapper = new ObjectMapper();
             Client[] clients = objectMapper.readValue(jsonData, Client[].class);
             for (Client client : clients) {
@@ -131,7 +161,7 @@ public class DataHandler {
     }
 
     /**
-     * write the books and publishers
+     * write the clients and accounts
      *
      */
     private static void writeJSON() {

@@ -14,18 +14,18 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * short description
+ * a short test run
  * <p>
- * Bookshelf
+ * online Banking
  *
- * @author TODO
+ * @author Leon Funtik
  */
 @Path("test")
 public class TestService {
 
     @GET
     @Path("test")
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.TEXT_PLAIN)
     public Response test() {
 
         return Response

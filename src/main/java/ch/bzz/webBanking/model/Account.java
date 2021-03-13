@@ -2,7 +2,7 @@ package ch.bzz.webBanking.model;
 
 public class Account {
     private String accountUUID;
-    private Double balance;
+    private double balance;
     private String password;
     private String address;
     
